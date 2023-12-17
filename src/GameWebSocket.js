@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 const GameWebSocket = () => {
   const socketRef = useRef(null);
-  const retryCount = useRef(0);
-  const maxRetries = 3; // Set the maximum number of retries
+  const maxRetries = 3;
 
-  const initializeWebSocket = () => {
+  const initializeWebSocket = (retryCount = 0) => {
     socketRef.current = new WebSocket('wss://pronto-challenge.ngrok.app/vistritpandey@gmail.com/ws');
 
     socketRef.current.addEventListener('open', () => {
@@ -25,10 +24,10 @@ const GameWebSocket = () => {
 
     socketRef.current.addEventListener('close', () => {
       console.log('WebSocket connection closed');
-      if (retryCount.current < maxRetries) {
-        console.log(`Retrying WebSocket connection (${retryCount.current + 1}/${maxRetries})...`);
-        retryCount.current += 1;
-        initializeWebSocket(); // Retry WebSocket connection
+      if (retryCount < maxRetries) {
+        const delay = 1000 * Math.pow(2, retryCount);
+        console.log(`Retrying WebSocket connection in ${delay / 1000} seconds...`);
+        setTimeout(() => initializeWebSocket(retryCount + 1), delay);
       } else {
         console.error('Max retries reached. Unable to establish WebSocket connection.');
       }
@@ -57,10 +56,9 @@ const GameWebSocket = () => {
     };
   }, []);
 
-  // Example usage of sendMessage
   useEffect(() => {
     sendMessage('Hello, WebSocket!');
-  }, []); // This sends a message when the component mounts
+  }, []);
 
   return null;
 };

@@ -6,22 +6,9 @@ const GameCanvas = () => {
   const [turrets, setTurrets] = useState([]);
   const [loons, setLoons] = useState([]);
   const socketRef = useRef(null);
-  const [notifications, setNotifications] = useState([]); // Add this line
-  const [gameUpdates, setGameUpdates] = useState([]);     // Add this line
-  const [defeatedLoons, setDefeatedLoons] = useState([]); // Add this line
-  
-
-  const handleTurretPlacement = (turretPlacement) => {
-    if (socketRef.current) {
-      socketRef.current.send(JSON.stringify({ publish: { turretPlacement } }));
-    }
-  };
-
-  const handlePopLoon = (popLoon) => {
-    if (socketRef.current) {
-      socketRef.current.send(JSON.stringify({ publish: { popLoon } }));
-    }
-  };
+  const [notifications, setNotifications] = useState([]);
+  const [gameUpdates, setGameUpdates] = useState([]);
+  const [defeatedLoons, setDefeatedLoons] = useState([]);
 
   const handleDrop = (e) => {
     e.preventDefault();
